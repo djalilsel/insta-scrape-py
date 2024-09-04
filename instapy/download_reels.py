@@ -77,7 +77,6 @@ class Instapy:
                 nodes = response.json()['data']['xdt_api__v1__feed__user_timeline_graphql_connection']['edges']
                 for node in nodes:
                     video_url = node['node']['code']
-                    print(links)
                     links.append(video_url)
             else:
                 print("server returned ", response.status_code, " status code")
@@ -87,7 +86,7 @@ class Instapy:
         urls = [f'https://www.instagram.com/reel/{url}/' for url in links]
         if count != len(urls) and count < len(urls):   
             urls = urls[0:count]
-        print("Got:", len(links), "reels links")
+        print("Got:", len(urls), "reels links")
         return urls
     
     def get_job_id(self, link):
@@ -164,7 +163,7 @@ class Instapy:
 
             downloadLink = response.json()['payload'][0]['path']
             title = f"{link.split('/')[-2]}.mp4"
-            os.makedirs(f"videos", exist_ok=True)
+            os.makedirs(path, exist_ok=True)
 
 
             print("Downloading reel...")
