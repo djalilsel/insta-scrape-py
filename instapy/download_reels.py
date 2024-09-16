@@ -66,22 +66,27 @@ class Instapy:
             raise ValueError("Error getting reels links")
         
         for i in range(12, count, 12):
-            variables = {'variables': f'{{"after":"{last_id}","before":null,"data":{{"count":{count - i},"include_relationship_info":true,"latest_besties_reel_media":true,"latest_reel_media":true}},"username":"{user}","__relay_internal__pv__PolarisIsLoggedInrelayprovider":true,"__relay_internal__pv__PolarisFeedShareMenurelayprovider":true}}'}
-            data = {
-                'av': user_id,
-                'doc_id': '8388565321195220',
-            }
-            data.update(variables)
-            response = requests.post('https://www.instagram.com/graphql/query', cookies=self.cookies,  data=data)
-            if response.status_code == 200:
-                nodes = response.json()['data']['xdt_api__v1__feed__user_timeline_graphql_connection']['edges']
-                for node in nodes:
-                    video_url = node['node']['code']
-                    links.append(video_url)
-            else:
-                print("server returned ", response.status_code, " status code")
-                raise ValueError("Error getting reels links")
-            last_id = nodes[-1]['node']['id']
+            try:
+                variables = {'variables': f'{{"after":"{last_id}","before":null,"data":{{"count":{count - i},"include_relationship_info":true,"latest_besties_reel_media":true,"latest_reel_media":true}},"username":"{user}","__relay_internal__pv__PolarisIsLoggedInrelayprovider":true,"__relay_internal__pv__PolarisFeedShareMenurelayprovider":true}}'}
+                data = {
+                    'av': user_id,
+                    'doc_id': '8388565321195220',
+                }
+                data.update(variables)
+                response = requests.post('https://www.instagram.com/graphql/query', cookies=self.cookies,  data=data)
+                if response.status_code == 200:
+                    nodes = response.json()['data']['xdt_api__v1__feed__user_timeline_graphql_connection']['edges']
+                    for node in nodes:
+                        video_url = node['node']['code']
+                        links.append(video_url)
+                else:
+                    print("server returned ", response.status_code, " status code")
+                    raise ValueError("Error getting reels links")
+                if len(nodes) == 0:
+                    break
+                last_id = nodes[-1]['node']['id']
+            except:
+                print("error getting all the reels")
 
         urls = [f'https://www.instagram.com/reel/{url}/' for url in links]
         if count != len(urls) and count < len(urls):   
@@ -181,3 +186,5 @@ class Instapy:
         user_id = self.get_user_id(user)
         reels_links = self.get_reels_links(user, count=count, user_id=user_id)
         self.download_reels(reels_links=reels_links, path=path)
+
+   
