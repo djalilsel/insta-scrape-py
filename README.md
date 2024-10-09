@@ -28,7 +28,7 @@ Make sure to replace the placeholders with the correct values:
 ```python
 from instapy import Instapy
 
-COOKIES = { 'should be json format' } # Replace with your instagram cookies
+COOKIES = { 'should be json' } # Replace with your instagram cookies
 USER = 'username_of_the_page_you_want_to_scrape'
 COUNT= 100 # Number of videos you want to download from the page ( you can use float('int') to download all the videos )
 PATH = 'path/to/save/videos' # Replace with the path where you want the videos to be saved
@@ -36,5 +36,9 @@ PATH = 'path/to/save/videos' # Replace with the path where you want the videos t
 # Initialize instapy with the account cookies
 insta = Instapy(cookies=COOKIES)
 
+# Scrape a page
 insta.scrape_page(USER, count=COUNT, path=PATH)
+
+# Download reels using links
+# insta.download_reels(reels_links=['https://www.instagram.com/reels/reel_id/'])
 ```
