@@ -1,3 +1,6 @@
 build/
 dist/
 insta_scrape_py.egg-info/
+test.py
+setup.py
+instagram-scrape-436219-fc09c6b8dfa3.json
